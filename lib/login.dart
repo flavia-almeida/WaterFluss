@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'home.dart';
+import 'grafo_pizza.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -100,7 +101,7 @@ class _login extends State<Login> {
                       print(passwordController.text);
 
                       Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) => Home())
+                          MaterialPageRoute(builder: (context) => Pizza())
                       );
                     },
                     style: ButtonStyle(
