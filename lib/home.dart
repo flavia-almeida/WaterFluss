@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'grafo_pizza.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -11,10 +12,12 @@ class Home extends StatefulWidget {
 class _home extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.all(10),
-        child: ListView(
+    return Scaffold(
+      appBar: AppBar(),
+      body: Center(
+          child: ListView(
             children: <Widget>[
+              SizedBox(height: 30),
               Container(
                   height: 50,
                   padding: const EdgeInsets.fromLTRB(60, 0, 60, 0),
@@ -33,11 +36,9 @@ class _home extends State<Home> {
                       )
                   )
               ),
-            ]
-
-
-        )
-
+            ],
+          ),
+      ),
     );
   }
 }
