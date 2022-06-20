@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 class Pizza extends StatefulWidget {
   Pizza({Key? key}) : super(key: key);
-
   @override
   State<Pizza> createState() => _PizzaState();
 }
@@ -25,31 +24,45 @@ class _PizzaState extends State<Pizza> {
         padding: const EdgeInsets.only(top: 50),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[Grafico()],
+          children: <Widget>[
+            Grafico(),
+            Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.fromLTRB(10, 15, 30, 10),
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.fromLTRB(10, 15, 30, 10),
+                    width: 30,
+                    height: 30,
+                    decoration: const BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        color: Color.fromRGBO(122, 97, 186, 1.0)),
+                  ),
+                  Container(
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.fromLTRB(10, 15, 30, 10),
+                      child: const Text(
+                        'Água disponível',
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: Color.fromRGBO(102, 102, 102, 1.0)),
+                      )),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
-  }
-
-  set_dados() {
-    return List.generate(1, (index) {
-      final fontSize = 14.0;
-      final Radius = 0.0;
-      final color = Color.fromARGB(255, 56, 72, 214);
-
-      return PieChartSectionData(
-          color: Color.fromARGB(255, 56, 72, 214),
-          value: valor * 100,
-          title: '${valor.toStringAsFixed(0)}%',
-          radius: 110.0);
-    });
   }
 
   List<Data> data = [
     Data(
         nome: 'contem',
         porcent: 15000,
-        color: Color.fromRGBO(102, 102, 102, 1.0)),
+        color: Color.fromRGBO(122, 97, 186, 1.0)),
     Data(
         nome: 'vazio',
         porcent: 5000,
@@ -60,7 +73,16 @@ class _PizzaState extends State<Pizza> {
       .asMap()
       .map<int, PieChartSectionData>((index, data) {
         final value = PieChartSectionData(
-            color: data.color, value: data.porcent, title: '${data.porcent}%');
+          color: data.color,
+          value: data.porcent,
+          //title: '${data.porcent.toStringAsFixed(0)} L',
+          title: '',
+          titleStyle: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Color(0xffffffff),
+          ),
+        );
         return MapEntry(index, value);
       })
       .values
@@ -77,15 +99,19 @@ class _PizzaState extends State<Pizza> {
       );
     } else {
       return Stack(
-        alignment: Alignment.center,
+        alignment: Alignment.topLeft,
         children: [
           AspectRatio(
-            aspectRatio: 1,
-            child: PieChart(
-              PieChartData(
-                sectionsSpace: 5,
-                centerSpaceRadius: 0,
-                sections: getSections(),
+            aspectRatio: 2,
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: PieChart(
+                PieChartData(
+                  borderData: FlBorderData(show: false),
+                  sectionsSpace: 0,
+                  centerSpaceRadius: 50,
+                  sections: getSections(),
+                ),
               ),
             ),
           ),

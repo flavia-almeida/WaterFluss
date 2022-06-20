@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'home.dart';
 import 'grafo_pizza.dart';
+import 'controller/login_controller.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -23,24 +23,24 @@ class _login extends State<Login> {
             Container(
                 alignment: Alignment.center,
                 padding: const EdgeInsets.all(10),
-                child: new Image.asset('graphics/logo_waterfluss.png',
-                    width: 91)
-            ),
+                child:
+                    new Image.asset('graphics/logo_waterfluss.png', width: 91)),
             Container(
                 alignment: Alignment.center,
                 padding: const EdgeInsets.all(10),
                 child: const Text(
                   'WatterFluss',
-                  style: TextStyle(fontSize: 20, color: Color.fromRGBO(102, 102, 102, 1.0)),
+                  style: TextStyle(
+                      fontSize: 20, color: Color.fromRGBO(102, 102, 102, 1.0)),
                 )),
-
             SizedBox(height: 30),
             Container(
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.fromLTRB(30, 15, 30, 10),
                 child: const Text(
                   'Login',
-                  style: TextStyle(fontSize: 20, color: Color.fromRGBO(102, 102, 102, 1.0)),
+                  style: TextStyle(
+                      fontSize: 20, color: Color.fromRGBO(102, 102, 102, 1.0)),
                 )),
             Container(
               padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
@@ -52,7 +52,8 @@ class _login extends State<Login> {
                       borderRadius: BorderRadius.circular(25.0),
                     ),
                     filled: true,
-                    hintStyle: TextStyle(color: Color.fromRGBO(102, 102, 102, 1.0)),
+                    hintStyle:
+                        TextStyle(color: Color.fromRGBO(102, 102, 102, 1.0)),
                     hintText: "User",
                     fillColor: Colors.white70),
               ),
@@ -65,14 +66,13 @@ class _login extends State<Login> {
                 padding: const EdgeInsets.fromLTRB(30, 15, 30, 10),
                 child: const Text(
                   'Senha',
-                  style: TextStyle(fontSize: 20, color: Color.fromRGBO(102, 102, 102, 1.0)),
+                  style: TextStyle(
+                      fontSize: 20, color: Color.fromRGBO(102, 102, 102, 1.0)),
                 )),
             Container(
-
               padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
               width: 200,
               child: TextField(
-
                   obscureText: true,
                   controller: passwordController,
                   decoration: InputDecoration(
@@ -80,16 +80,18 @@ class _login extends State<Login> {
                         borderRadius: BorderRadius.circular(25.0),
                       ),
                       filled: true,
-                      hintStyle: TextStyle(color: Color.fromRGBO(102, 102, 102, 1.0)),
+                      hintStyle:
+                          TextStyle(color: Color.fromRGBO(102, 102, 102, 1.0)),
                       hintText: "Password",
-                      fillColor: Colors.white70)
-              ),
+                      fillColor: Colors.white70)),
             ),
             TextButton(
               onPressed: () {
                 //forgot password screen
               },
-              child: const Text('Esqueci minha senha',),
+              child: const Text(
+                'Esqueci minha senha',
+              ),
             ),
             Container(
                 height: 50,
@@ -99,41 +101,17 @@ class _login extends State<Login> {
                     onPressed: () {
                       print(nameController.text);
                       print(passwordController.text);
-
-                      Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) => Pizza())
-                      );
+                      login(nameController.text, passwordController.text,
+                          context);
                     },
                     style: ButtonStyle(
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                              //side: BorderSide(color: Colors.red)
-                            )
-                        )
-                    )
-                )
-            ),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                      //side: BorderSide(color: Colors.red)
+                    ))))),
             SizedBox(height: 30),
-            Container(
-                height: 50,
-                padding: const EdgeInsets.fromLTRB(60, 0, 60, 0),
-                child: ElevatedButton(
-                    child: const Text('Continuar sem login'),
-                    onPressed: () {
-                      print(nameController.text);
-                      print(passwordController.text);
-                    },
-                    style: ButtonStyle(
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                              //side: BorderSide(color: Colors.red)
-                            )
-                        )
-                    )
-                )
-            ),
           ],
         ));
   }
