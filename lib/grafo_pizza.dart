@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import '../caixadagua_globals.dart' as CaixaDagua;
 
 class Pizza extends StatefulWidget {
   Pizza({Key? key}) : super(key: key);
@@ -14,12 +15,48 @@ class Data {
   Data({required this.nome, required this.porcent, required this.color});
 }
 
-class _PizzaState extends State<Pizza> {
-  double valor = 60.0;
+class NivelMessageWidget extends StatelessWidget {
+  final double? altura;
+  final double? total;
+
+  // ignore: use_key_in_widget_constructors
+  const NivelMessageWidget({@required this.altura, @required this.total});
+
   @override
   Widget build(BuildContext context) {
+    return Text('Água Disponível: ${altura.toString()} de ${total.toString()}');
+  }
+}
+
+class AbastecimentoMessageWidget extends StatelessWidget {
+  final String? texto;
+
+  // ignore: use_key_in_widget_constructors
+  const AbastecimentoMessageWidget({@required this.texto});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text('$texto');
+
+  }
+}
+
+class _PizzaState extends State<Pizza> {
+  double valor = -1;
+  double percent_tot = -1;
+  String texto = "";
+  @override
+  Widget build(BuildContext context) {
+    valor = CaixaDagua.sensorNivel;
+    percent_tot = CaixaDagua.alturaReservatorio - CaixaDagua.sensorNivel;
+    if (CaixaDagua.Abastecimento == true){
+      texto = "Atualmente há abastecimento!";
+    }else{
+      texto = "Atualmente não há abastecimento!";
+    }
+
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(title: const Text("Monitoramento"),),
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(top: 50),
         child: Column(
@@ -41,14 +78,27 @@ class _PizzaState extends State<Pizza> {
                         color: Color.fromRGBO(122, 97, 186, 1.0)),
                   ),
                   Container(
-                      alignment: Alignment.centerLeft,
-                      padding: const EdgeInsets.fromLTRB(10, 15, 30, 10),
-                      child: const Text(
-                        'Água disponível',
-                        style: TextStyle(
-                            fontSize: 20,
-                            color: Color.fromRGBO(102, 102, 102, 1.0)),
-                      )),
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.fromLTRB(10, 15, 30, 10),
+                    child: Row(
+                      children: [
+                        NivelMessageWidget(
+                            altura: CaixaDagua.sensorNivel,
+                            total: CaixaDagua.alturaReservatorio),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 10),
+            Container(
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.fromLTRB(10, 15, 30, 10),
+              child: Row(
+                children: [
+                  AbastecimentoMessageWidget(
+                      texto: texto),
                 ],
               ),
             ),
@@ -61,11 +111,11 @@ class _PizzaState extends State<Pizza> {
   List<Data> data = [
     Data(
         nome: 'contem',
-        porcent: 15000,
+        porcent: CaixaDagua.sensorNivel,
         color: Color.fromRGBO(122, 97, 186, 1.0)),
     Data(
         nome: 'vazio',
-        porcent: 5000,
+        porcent: CaixaDagua.alturaReservatorio - CaixaDagua.sensorNivel,
         color: Color.fromRGBO(255, 255, 255, 1.0)),
   ];
 
