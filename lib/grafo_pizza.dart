@@ -17,15 +17,14 @@ class Data {
 }
 
 class NivelMessageWidget extends StatelessWidget {
-  final double? altura;
-  final double? total;
+  final double? percent;
 
   // ignore: use_key_in_widget_constructors
-  const NivelMessageWidget({@required this.altura, @required this.total});
+  const NivelMessageWidget({@required this.percent});
 
   @override
   Widget build(BuildContext context) {
-    return Text('Água Disponível: ${altura.toString()} de ${total.toString()}');
+    return Text('Água Disponível: ${percent?.toStringAsFixed(2)}%');
   }
 }
 
@@ -126,8 +125,7 @@ class _PizzaState extends State<Pizza> {
                     child: Row(
                       children: [
                         NivelMessageWidget(
-                            altura: CaixaDagua.sensorNivel,
-                            total: CaixaDagua.alturaReservatorio),
+                            percent: ((CaixaDagua.sensorNivel *100) / CaixaDagua.alturaReservatorio)),
                       ],
                     ),
                   ),
