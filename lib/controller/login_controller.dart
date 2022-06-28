@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import '../globals.dart' as globals;
 import 'package:flutter/material.dart';
+import '../grafo_pizza.dart';
 import 'level_controller.dart';
 
 class Carregando extends StatefulWidget {
@@ -48,7 +49,9 @@ Future<bool> login(String user, String password, BuildContext context) async {
 
     globals.token = LoginResponse.fromJson(response.data).accessToken;
     log("logou, token: " + globals.token);
-    Level_Check(context);
+    //Level_Check(context);
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (context) => Pizza()));
     return true;
   } else {
     log("não logou");

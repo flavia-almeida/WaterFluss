@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import '../caixadagua_globals.dart' as CaixaDagua;
+import 'controller/level_controller.dart';
 
 class Pizza extends StatefulWidget {
   Pizza({Key? key}) : super(key: key);
@@ -37,7 +38,6 @@ class AbastecimentoMessageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text('$texto');
-
   }
 }
 
@@ -45,18 +45,61 @@ class _PizzaState extends State<Pizza> {
   double valor = -1;
   double percent_tot = -1;
   String texto = "";
+
+  List<Data> data = [
+    Data(
+        nome: 'contem',
+        porcent: CaixaDagua.sensorNivel,
+        color: Color.fromRGBO(122, 97, 186, 1.0)),
+    Data(
+        nome: 'vazio',
+        porcent: CaixaDagua.alturaReservatorio - CaixaDagua.sensorNivel,
+        color: Color.fromRGBO(255, 255, 255, 1.0)),
+  ];
+
   @override
+  Future reload() async {
+    await BuscaLevel();
+    await BuscaAbastecimento();
+
+    final List<Data> data = [
+      Data(
+          nome: 'contem',
+          porcent: CaixaDagua.sensorNivel,
+          color: Color.fromRGBO(122, 97, 186, 1.0)),
+      Data(
+          nome: 'vazio',
+          porcent: CaixaDagua.alturaReservatorio - CaixaDagua.sensorNivel,
+          color: Color.fromRGBO(255, 255, 255, 1.0)),
+    ];
+    final percent_tot = CaixaDagua.alturaReservatorio - CaixaDagua.sensorNivel;
+    final valor = CaixaDagua.sensorNivel;
+    if (CaixaDagua.Abastecimento == true) {
+      final texto = "Atualmente há abastecimento!";
+    } else {
+      final texto = "Atualmente não há abastecimento!";
+    }
+
+    setState(() => this.data = data);
+    setState(() => this.percent_tot = percent_tot);
+    setState(() => this.valor = valor);
+    setState(() => this.texto = texto);
+    Grafico();
+  }
+
   Widget build(BuildContext context) {
     valor = CaixaDagua.sensorNivel;
     percent_tot = CaixaDagua.alturaReservatorio - CaixaDagua.sensorNivel;
-    if (CaixaDagua.Abastecimento == true){
+    if (CaixaDagua.Abastecimento == true) {
       texto = "Atualmente há abastecimento!";
-    }else{
+    } else {
       texto = "Atualmente não há abastecimento!";
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Monitoramento"),),
+      appBar: AppBar(
+        title: const Text("Monitoramento"),
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(top: 50),
         child: Column(
@@ -97,27 +140,20 @@ class _PizzaState extends State<Pizza> {
               padding: const EdgeInsets.fromLTRB(10, 15, 30, 10),
               child: Row(
                 children: [
-                  AbastecimentoMessageWidget(
-                      texto: texto),
+                  AbastecimentoMessageWidget(texto: texto),
                 ],
               ),
             ),
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: reload,
+        tooltip: 'Increment',
+        child: const Icon(Icons.update),
+      ),
     );
   }
-
-  List<Data> data = [
-    Data(
-        nome: 'contem',
-        porcent: CaixaDagua.sensorNivel,
-        color: Color.fromRGBO(122, 97, 186, 1.0)),
-    Data(
-        nome: 'vazio',
-        porcent: CaixaDagua.alturaReservatorio - CaixaDagua.sensorNivel,
-        color: Color.fromRGBO(255, 255, 255, 1.0)),
-  ];
 
   List<PieChartSectionData> getSections() => data
       .asMap()
@@ -140,6 +176,7 @@ class _PizzaState extends State<Pizza> {
 
   Grafico() {
     if ((valor <= 0)) {
+      reload();
       return Container(
         width: MediaQuery.of(context).size.width,
         height: 200,

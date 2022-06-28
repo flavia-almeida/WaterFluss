@@ -33,7 +33,7 @@ class _Carregando extends State<Carregando> {
   }
 }
 
-Future<bool> Abastecimento(BuildContext context) async {
+Future<bool> BuscaAbastecimento() async {
   log("Level_check:");
   var dio = Dio();
   var carrega = const Carregando();
@@ -42,9 +42,17 @@ Future<bool> Abastecimento(BuildContext context) async {
   dio.options.headers["Authorization"] = "Bearer ${globals.token}";
   var response = await dio.get(
       'https://watterflussapiintegracao.azurewebsites.net/api/SensorVazao/VerificaAbastecimento');
-  log("Abastecimento responde.data: "+response.data.toString());
+  log("Abastecimento responde.data: " + response.data.toString());
   if (response.statusCode == 200) {
     CaixaDagua.Abastecimento = response.data;
+    return true;
+  } else {
+    return false;
+  }
+}
+
+Future<bool> Abastecimento(BuildContext context) async {
+  if (await BuscaAbastecimento() == true) {
     Navigator.of(context)
         .pushReplacement(MaterialPageRoute(builder: (context) => Pizza()));
     return true;
@@ -59,21 +67,20 @@ Future<bool> Abastecimento(BuildContext context) async {
             }),
       ],
     );
-    throw Exception('Não foi possível obter os produtos');
+    return false;
   }
 }
 
 class AbastecimentoResponse {
   final bool abastecimento;
 
-  AbastecimentoResponse(
-      {required this.abastecimento});
+  AbastecimentoResponse({required this.abastecimento});
 
-  factory AbastecimentoResponse.fromJson(Map<String, dynamic> json) => AbastecimentoResponse(
-      abastecimento: json['idReservatorio']);
+  factory AbastecimentoResponse.fromJson(Map<String, dynamic> json) =>
+      AbastecimentoResponse(abastecimento: json['idReservatorio']);
 }
 
-Future<bool> Level_Check(BuildContext context) async {
+Future<bool> BuscaLevel() async {
   log("Level_check:");
   var dio = Dio();
   var carrega = const Carregando();
@@ -91,8 +98,15 @@ Future<bool> Level_Check(BuildContext context) async {
         CaixaResponse.fromJson(response.data).idReservatorio;
     CaixaDagua.dataHora = CaixaResponse.fromJson(response.data).dataHora;
     CaixaDagua.sensorNivel = CaixaResponse.fromJson(response.data).sensorNivel;
+    return true;
+  } else {
+    return false;
+  }
+}
 
-    Abastecimento(context);
+Future<bool> Level_Check(BuildContext context) async {
+  if (await BuscaLevel() == true) {
+    await Abastecimento(context);
     return true;
   } else {
     CupertinoAlertDialog(
@@ -105,7 +119,7 @@ Future<bool> Level_Check(BuildContext context) async {
             }),
       ],
     );
-    throw Exception('Não foi possível obter os produtos');
+    return false;
   }
 }
 
